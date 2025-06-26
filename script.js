@@ -3,6 +3,7 @@ let dados = [];
 let animaisFiltrados = [];
 let atributos = [];
 let atributoAtual = '';
+let caminhoPercorrido = [];
 
 fetch('zoo_dataset.csv')
     .then(response => response.text())
@@ -10,12 +11,13 @@ fetch('zoo_dataset.csv')
         dados = parseCSV(csv);
         animaisFiltrados = [...dados];
         atributos = Object.keys(dados[0]).filter(attr => attr !== 'animais');
+        console.log(animaisFiltrados.find(a => a.animais === "javali"));
         proximaPergunta();
     });
 
 function parseCSV(csv) {
     const linhas = csv.trim().split('\n');
-    const cabecalho = linhas[0].split(',');
+    const cabecalho = linhas[0].split(',').map(col => col.trim());
 
     return linhas.slice(1).map(linha => {
         const valores = linha.split(',');
@@ -52,8 +54,8 @@ function gerarTextoPergunta(attr) {
         ave: "É uma ave?",
         reptil: "É um réptil?",
         anfibio: "É um anfíbio?",
-        carnivoro: "É carnívoro?",
-        herbivoro: "É herbívoro?",
+        carnivoro: "Come carne?",
+        herbivoro: "Come vegetais?",
         pelos: "Possui pelos?",
         penas: "Possui penas?",
         escamas: "Possui escamas?",
@@ -62,13 +64,13 @@ function gerarTextoPergunta(attr) {
         aereo: "Vive no ambiente aéreo (voa)?",
         chifre: "Possui chifres?",
         presas: "Possui presas?",
-        pescoco: "Tem pescoço alongado?",
+        pescoco: "Tem pescoço muito alongado?",
         dentes: "Possui dentes?",
         ovos: "Bota ovos?",
         bipede: "É bípede?",
         venenoso: "É venenoso?",
         listras: "Possui listras?",
-        cauda: "Possui cauda?",
+        cauda: "Possui rabo?",
     };
     return mapa[attr] || `Possui a característica ${attr}?`;
 }
@@ -112,6 +114,12 @@ function responder(resposta) {
         // Usuário respondeu "não sei" → remover atributo da lista
         atributos = atributos.filter(attr => attr !== atributoAtual);
     }
+
+    caminhoPercorrido.push({
+        atributo: gerarTextoPergunta(atributoAtual),
+        resposta: resposta // "Sim", "Não", ou "Não sei"
+    });
+
     proximaPergunta();
 }
 
@@ -130,4 +138,23 @@ function mostrarResultadoFinal() {
         document.getElementById('resultado').innerText =
             "😄 Parece que você não tem um animal preferido em particular, então divirta-se visitando todos!";
     }
+    document.getElementById("btnSim").style.display = "none";
+    document.getElementById("btnNao").style.display = "none";
+    document.getElementById("btnNaoSei").style.display = "none";
+    document.getElementById("btnRecomecar").style.display = "inline-block";
+
+    const divCaminho = document.createElement("div");
+    divCaminho.innerHTML = "<h3>Caminho percorrido:</h3><ul>" +
+        caminhoPercorrido.map(passo =>
+            `<li><strong>${passo.atributo}</strong>: ${passo.resposta}</li>`
+        ).join('') +
+        "</ul>";
+
+    document.getElementById("caminho").appendChild(divCaminho);
+
+}
+
+
+function recomecar() {
+    location.reload(); // recarrega a página
 }

@@ -9,19 +9,22 @@
 <body>
     <h1>🦓 Descubra Seu Animal do Zoológico 🦁</h1>
     <p id="intro">
-        Responda às perguntas sobre as características que você gostaria de ver em um animal. No final, diremos quem você não pode deixar de visitar no zoológico!
+        Responda às perguntas sobre as características que você gostaria de ver em um animal. <br>No final, diremos quem você não pode deixar de visitar no zoológico!
     </p>
 
     <div id="intro" id="preferido">Diga-me as características que você sabe sobre seu animal preferido:</div>
     <div id="pergunta">Carregando pergunta...</div>
 
     <div class="botoes">
-        <button onclick="responder('sim')">Sim</button>
-        <button onclick="responder('nao')">Não</button>
-        <button onclick="responder('naosei')">Não sei</button>
+        <button id="btnSim" style="display:inline;" onclick="responder('sim')">Sim</button>
+        <button id="btnNao" style="display:inline;" onclick="responder('nao')">Não</button>
+        <button id="btnNaoSei" style="display:inline;" onclick="responder('naosei')">Não sei</button>
+        <button id="btnRecomecar" style="display:none;" onclick="recomecar()">Recomeçar</button>
     </div>
 
     <div id="resultado"></div>
+
+    <div id="caminho"></div>
 
     <script src="script.js"></script>
 </body>
