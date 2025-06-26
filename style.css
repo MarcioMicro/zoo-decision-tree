@@ -1,0 +1,39 @@
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f1f1f1;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+#intro {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+#preferido {
+    background: blue;
+}
+
+#pergunta {
+    margin: 20px;
+    font-size: 24px;
+}
+
+.botoes button {
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+#resultado {
+    margin-top: 30px;
+    font-size: 22px;
+    color: green;
+}
