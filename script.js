@@ -20,7 +20,7 @@ function parseCSV(csv) {
     return linhas.slice(1).map(linha => {
         const valores = linha.split(',');
         const obj = {};
-        cabecalho.forEach((col, i) => {            
+        cabecalho.forEach((col, i) => {
             obj[col] = i === 0 ? valores[i] : valores[i] === 'TRUE';
         });
         return obj;
@@ -29,15 +29,20 @@ function parseCSV(csv) {
 
 function escolherMelhoresAtributos() {
     const scores = atributos.map(attr => {
+        console.log(attr);
         const sim = animaisFiltrados.filter(a => a[attr]).length;
+        console.log(sim);
         const nao = animaisFiltrados.length - sim;
+        console.log(nao);
         const balanceamento = Math.min(sim, nao);
+        console.log(balanceamento);
+        if (balanceamento <= 0) return;
         return { attr, balanceamento };
     });
 
     scores.sort((a, b) => b.balanceamento - a.balanceamento);
-    scoresReturned = [scores[0]?.attr, scores[1]?.attr].filter(Boolean)
-    //console.log(scoresReturned);
+    scoresReturned = [scores[0]?.attr, scores[1]?.attr, scores[2]?.attr].filter(Boolean)
+    console.log(scoresReturned);
     return scoresReturned;
 }
 
@@ -74,7 +79,7 @@ function proximaPergunta() {
         return;
     }
 
-    if (animaisFiltrados.length <=1 ) {
+    if (animaisFiltrados.length <= 1) {
         mostrarResultadoFinal();
         return;
     }
@@ -115,14 +120,14 @@ function mostrarResultadoFinal() {
     document.getElementById('pergunta').innerText = '';
 
     if (animaisFiltrados.length === 0) {
-        document.getElementById('resultado').innerText = 
+        document.getElementById('resultado').innerText =
             "😕 Não encontramos nenhum animal com essas características.";
     } else if (animaisFiltrados.length <= 3) {
         const nomes = animaisFiltrados.map(a => a.animais.toUpperCase()).join(', ');
-        document.getElementById('resultado').innerText = 
+        document.getElementById('resultado').innerText =
             `🦁 Você não pode deixar de visitar: ${nomes}!`;
     } else {
-        document.getElementById('resultado').innerText = 
+        document.getElementById('resultado').innerText =
             "😄 Parece que você não tem um animal preferido em particular, então divirta-se visitando todos!";
     }
 }
