@@ -10,8 +10,7 @@ fetch('zoo_dataset.csv')
     .then(csv => {
         dados = parseCSV(csv);
         animaisFiltrados = [...dados];
-        atributos = Object.keys(dados[0]).filter(attr => attr !== 'animais');
-        console.log(animaisFiltrados.find(a => a.animais === "javali"));
+        atributos = Object.keys(dados[0]).filter(attr => attr !== 'animais');        
         proximaPergunta();
     });
 
@@ -21,23 +20,30 @@ function parseCSV(csv) {
 
     return linhas.slice(1).map(linha => {
         const valores = linha.split(',');
+
+        // Garante que valores ausentes sejam preenchidos como 'FALSE'
+        while (valores.length < cabecalho.length) {
+            valores.push('FALSE');
+        }
+
         const obj = {};
         cabecalho.forEach((col, i) => {
-            obj[col] = i === 0 ? valores[i] : valores[i] === 'TRUE';
+            obj[col] = i === 0 ? valores[i].trim() : valores[i].trim() === 'TRUE';
         });
         return obj;
     });
 }
 
+
 function escolherMelhoresAtributos() {
     const scores = atributos.map(attr => {
-        console.log(attr);
+        //console.log(attr);
         const sim = animaisFiltrados.filter(a => a[attr]).length;
-        console.log(sim);
+        //console.log(sim, " - ", nao);
         const nao = animaisFiltrados.length - sim;
-        console.log(nao);
+        console.log(attr, sim, nao);
         const balanceamento = Math.min(sim, nao);
-        console.log(balanceamento);
+        //console.log(balanceamento);
         if (balanceamento <= 0) return;
         return { attr, balanceamento };
     });
@@ -45,6 +51,7 @@ function escolherMelhoresAtributos() {
     scores.sort((a, b) => b.balanceamento - a.balanceamento);
     scoresReturned = [scores[0]?.attr, scores[1]?.attr, scores[2]?.attr].filter(Boolean)
     console.log(scoresReturned);
+    console.log(animaisFiltrados.map(a => a.animais));    
     return scoresReturned;
 }
 
@@ -70,7 +77,7 @@ function gerarTextoPergunta(attr) {
         bipede: "É bípede?",
         venenoso: "É venenoso?",
         listras: "Possui listras?",
-        cauda: "Possui rabo?",
+        cauda: "Possui cauda longa?"
     };
     return mapa[attr] || `Possui a característica ${attr}?`;
 }
